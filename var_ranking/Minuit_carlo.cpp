@@ -25,13 +25,14 @@
 
 using namespace std;
 
+//struct to hold a variable info
 struct ranking
 {
 	string label;
 	float like;
 	double kolgo;
 	double ander;
-	int KS_index;
+	int KS_index; 
 	int AD_index;
 
 	ranking()
@@ -73,6 +74,7 @@ double maxXvalue;
 double minXvalue_cfr;
 double maxXvalue_cfr;
 
+//Likelihood function that Minuit will minimize
 void Likelihood(int& npar, double* grad, double& fval, double* xval, int flag) {
   //  cout << "In likelihood" << endl;
   double fs=(1+sin(xval[0]))/2.;  // i cazzi nel culo     
@@ -210,13 +212,13 @@ TFile *DATA = new TFile("/Users/Carlo/Desktop/Final_Software/NOCUT_DiJetPt_BJetP
 	
 	gStyle->SetOptStat(0);
  	gStyle->SetOptFit(0);
-	TH1D * ToySample =  new TH1D ("ToySample", "Measured distribution", Nbins, minXvalue, maxXvalue);
+	TH1D * ToySample =  new TH1D ("ToySample", "Measured distribution", Nbins, minXvalue, maxXvalue); //Toy Sample for Likelihood method
 	TH1D * Fit_result = new TH1D ("Fit_result", "Fit result", Nbins, minXvalue, maxXvalue);
 
 double Ntest1_old = S_templ->GetEntries();
 double Ntest2_old = B_templ->GetEntries();
 double ffs = 0.20;
-double supprB = ((1./ffs)-1)*(Ntest1_old/Ntest2_old); //3. / 0.33333 25 % signal 75 % bkg
+double supprB = ((1./ffs)-1)*(Ntest1_old/Ntest2_old); //3. / 0.33333 25 % signal 75 % bkg, want a known signal fraction
 double supprS = ((1./(1-ffs))-1)*(Ntest2_old/Ntest1_old); //
 double Ntest1, Ntest2;
 if (Ntest1_old<Ntest2_old) {Ntest2 = supprB*Ntest2_old; supprS = 1; Ntest1 = Ntest1_old;}
@@ -403,7 +405,7 @@ return 0;
 }
 
 
-
+//Anderson DArling Test
 double MyAndersonDarlingTest (const TH1 *h1, const TH1 *h2) {
 
   /*
@@ -446,6 +448,7 @@ double MyAndersonDarlingTest (const TH1 *h1, const TH1 *h2) {
   return A;
 }
 
+//Variable titles for histograms
 vector<string> setTitle(int nh)
 {
 vector<string> title(3); title[2] = "counts" ;

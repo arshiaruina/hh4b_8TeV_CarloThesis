@@ -24,13 +24,11 @@
 
 using namespace std;
 
-// changes from original versiona
-// 	1) nomore histograms
-//	2) matching in another function 
 
 void hhev_maker(string inputfilename, int TriggerFlagSel, bool check_comb, float in1, float in2, string filename)
 {
 const double pi=3.14159265358979;
+// CSV cut value, I use them on CMVA as there are not customary working points. The medium cut should be 0.7.
 float bTagCSV_tightCut=0.898;
 float bTagCSV_mediumCut=0.679;
 float bTagCSV_looseCut=0.244;
@@ -94,7 +92,7 @@ int nEvents=tree->GetEntries();
 //string out_branch_name = "branch_3csv_"+filename; //change name here for NOCUT
 string out_branch_name = "NOCUT_"+filename; 
 TFile out_branches(out_branch_name.c_str(),"recreate");
-TTree dodo("albero","a Tree with data from a fake Geant3");
+TTree dodo("albero","a Tree");
 HHevent hhev;
 // "All" variables
 dodo.Branch("APt_min",&hhev.APt_min,"APt_min/F"); dodo.Branch("APt_mean",&hhev.APt_mean,"APt_mean/F"); dodo.Branch("APt_max",&hhev.APt_max,"APt_max/F");
@@ -142,7 +140,7 @@ dodo.Branch("JetsN",&hhev.JetsN,"JetsN/F");
 //________________________________________________________________________________
 for (int i=0; i<nEvents; ++i)
 {	
-	//if (trf==0){ if(i>=207883 && i<=208307) continue;} //Pixel misaligment
+	//skip events affected by pixel misaligment
 	if (trf != 0){ if ((207883<=EVENT.run && EVENT.run<=208307)) continue;}
 	float progress = 100.0*((float)i)/((float)nEvents);
 	if(!(i%100)) cout << setprecision(3) << progress << "% \r" ; 

@@ -21,6 +21,7 @@ a Mathematica notebook containing the 8 TeV pp->hh cross section parametrization
 * ouput:- >=3 btags events ntuple (hhev_maker.cc)
 	- 2 btags, 1 btag<loosecut events ntuple (hhev_control_region.cc)		
 	- plots of 3° jet pt, eta, no. of tracks ratio between the two categories above, check for the ABCD method (plottini.cc)
+    - .txt with efficiencies for each step
 
 
 ---------------------------------------------------------
@@ -68,6 +69,11 @@ histo_to_Combine.cpp
 * description: conversion of the 2D histograms into 1D ones with no empty bins, creation of the +1sigma and -1sigma uncertainty shapes.
 * input: "scatters.root".
 * output: "toCombine.root"
+
+roo.C
+* description: macro to plot the fit outcome that is in rooStat format
+* input: mlfit.root standard combine output file
+* output: a .pdf plot of the fit 
 
 ---------------------------------------------------------
 7) COMBINE

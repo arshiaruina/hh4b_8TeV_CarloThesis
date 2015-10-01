@@ -65,7 +65,7 @@ TH1D *merit_SL = new TH1D("SL_BDT", "BDT SL", 101, 0, 1);
 		if(s == 0 || b == 0) QBDT_err = 0.0;
 		else{QBDT_err = 10*sqrt(4*pow(-1/(2.*sqrt(b)) + 1/(2.*sqrt(b + s)),2)*SB2 + SS2/(b + s));}
 		
-		if(s != 0 && b != 0) QBDT = 2*(sqrt(s+b)-sqrt(b));	
+		if(s != 0 && b != 0) QBDT = 2*(sqrt(s+b)-sqrt(b));	// Byutonov-Krasnikov FOM
 		else QBDT = 0;
 		merit_BDT->SetBinContent(merit_BDT->FindBin(cut), QBDT);
 		merit_BDT->SetBinError(merit_BDT->FindBin(cut), QBDT_err);
@@ -73,8 +73,7 @@ TH1D *merit_SL = new TH1D("SL_BDT", "BDT SL", 101, 0, 1);
 
 		if(s != 0 && b != 0){ 
 			cout << s << "\t" << b << "\t" << s+b << "\t" << SL << endl;
-		//	if((-s+(b+s)*log((b+s)/b))<0) cout << "PORCADDIO" <<endl;
-			SL = sqrt(2.0)*sqrt(-s + (b+s)*log(1.0+(s/b)));
+			SL = sqrt(2.0)*sqrt(-s + (b+s)*log(1.0+(s/b))); //Likelihood ratio FOM
 			SL_err = 10*sqrt((SS2*pow(log((b + s)/b),2))/(2.*(-s + (b + s)*log((b + s)/b))) + (SB2*pow(b*(1/b - (b + s)/pow(b,2)) + log((b + s)/b),2))/(2.*(-s + (b + s)*log((b + s)/b))));
 			}
 		else {SL = 0; SL_err = 0;}

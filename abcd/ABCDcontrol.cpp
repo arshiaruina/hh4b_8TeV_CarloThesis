@@ -17,24 +17,23 @@
 #include <omp.h>
 
 using namespace std;
+//different lower cuts for the ABCD method
 float Validation_cut[16] = {0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51, 0.52, 0.53};
-//float lower_cut[14] = {0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51};
 
-
-// float Validation_cut = 0.52;
+// validation cut value from Figure of Merit Maximization
 float Q_cut = 0.55;
-// float lower_cut = 0.50;
 float CSVcut = 0.679;
 
+//struct to hold one event
 struct abcd
 {
-float nTr;
-float eta;
-float pt;
-float bv;
-float qcsv;
+float nTr;  //no. tracks 3rd jet
+float eta;  //eta 3rd jet
+float pt;	//pt 3rd jet
+float bv; 	//BDT value
+float qcsv; //CMVA 4th jet
 int region; // A=1, A_val=2, B=3, C = 4 , C_val = 5, D = 6; 
-abcd()
+abcd()		//empty constructor
 	{
 		nTr=0;
 		eta=0;
@@ -44,16 +43,19 @@ abcd()
 		region = 0; // 0 = unassigned
 	}
 };
+
+//function prototype
 vector <double> Dcount(vector<abcd> &, int, int, int, int, double *);
 
 
 int main()
 {
-double N[10];
-vector <abcd> evU;
-vector <abcd> evL;
+double N[10]; //event counter
+vector <abcd> evU; //container for 2btag events
+vector <abcd> evL; //container for >=3 btag events
 
-//-------------------Reading from files---------
+//-------------------Reading from files------------
+// upper tree = events with 2 btags
 TChain *upperTree = new TChain("albero");
 upperTree->Add("../Samples_BDT/BDT_CR_NOCUT_DiJetPt_BJetPlusX_Run2012B-13.root");
 upperTree->Add("../Samples_BDT/BDT_CR_NOCUT_DiJetPt_BJetPlusX_Run2012C-24.root");
@@ -76,7 +78,7 @@ upperTree->Add("../Samples_BDT/BDT_CR_NOCUT_DiJetPt_BJetPlusX_Run2012D-Pr.root")
 		evU[i].bv = u_BDT;
 		evU[i].qcsv = u_csv;
 	}
-
+// lower tree = events with >=3 btags
 TChain *lowerTree = new TChain("albero");
 lowerTree->Add("../Samples_BDT/BDT_NOCUT_DiJetPt_BJetPlusX_Run2012B-13Jul.root");
 lowerTree->Add("../Samples_BDT/BDT_NOCUT_DiJetPt_BJetPlusX_Run2012C-24Aug.root");
@@ -112,11 +114,13 @@ lowerTree->Add("../Samples_BDT/BDT_NOCUT_DiJetPt_BJetPlusX_Run2012D-Promp.root")
 // |	7	|	8	|	9	|		4btags
 // |		|		|		|
 // 	      Vcut 		Qcut
+
+//Validation cut bin edges
 float rightbinsV[17] = {0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51, 0.52, 0.53, 0.54};
-//float rightbinsL[15] = {0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51,0.52};
 
 
 
+//1245 ---> A=1, B=2, C=4, D=5.
 TFile * storage = new TFile("ValidationCut.root", "RECREATE");
 TH1D * H1245 = new TH1D("H1245", "H1245 (NDexp-ND)/NDexp",14, rightbinsV); //, 14, rightbinsL );
 TH1D * H1346 = new TH1D("H1346", "H1346 (NDexp-ND)/NDexp",14, rightbinsV); //, 14, rightbinsL );
@@ -127,6 +131,8 @@ H1346->SetTitle("1346"); H1346->GetXaxis()->SetTitle("Validation cut"); //H1346-
 H4578->SetTitle("4578"); H4578->GetXaxis()->SetTitle("Validation cut"); //H4578->GetYaxis()->SetTitle("Lower Cut");
 H4679->SetTitle("4679"); H4679->GetXaxis()->SetTitle("Validation cut"); //H4679->GetYaxis()->SetTitle("Lower Cut");
 
+
+//fill the regions
 for(int m = 0; m < 16; m++) {
 	//for(int l = 0; l < 14; l++){
 	//	if(lower_cut[l] >= Validation_cut[m]) {continue;}
@@ -149,6 +155,7 @@ for(int m = 0; m < 16; m++) {
 			if(evL[i].bv >= Q_cut) {evL[i].region = 9; N[9]++; }
 		}
 	}
+//put all the events  
 vector <abcd> ev;
 ev.reserve(evU.size()+evL.size());
 ev.insert(ev.end(), evU.begin(), evU.end()); 
@@ -227,7 +234,7 @@ return 0;
 
 
 
-
+//function that performs the D = (C/A)*B operation 
 vector<double> Dcount(vector<abcd> & ev, int A_reg, int B_reg, int C_reg, int D_reg, double * N)
 {
 
@@ -268,6 +275,7 @@ for(int i=1; i<=9; i++) { // eta bin
 						((bin_C->GetBinContent(i,j,k)/bin_A->GetBinContent(i,j,k))*bin_B->GetBinContent(i,j,k))*
 						((1./bin_B->GetBinContent(i,j,k)) + (1./bin_C->GetBinContent(i,j,k)) + (1./bin_A->GetBinContent(i,j,k)) );
 			}
+			// if the bin in A region is empty average the content of the nearest bins
 			if(bin_A->GetBinContent(i,j,k) == 0){
 
 			bx=i-1; fx=i+1; by=j-1; fy=j+1; bz=k-1; fz=k+1; 
@@ -317,10 +325,10 @@ cout << N[D_reg] <<"\t"<< ND_exp << "\t" << sqrt(statW) << "\t" << perc << endl;
 cout << "_______________________________________" << endl;
 
 vector<double> result(4);
-result[0] = ND_exp;							//ND expected											APP: ND expected
-result[1] = sqrt(statW);								//VAL: è l'errore statistico su ND_exp [relativo]		APP: errore stat su ND [relativo]
-result[2] = fabs(N[D_reg]-ND_exp)/ND_exp; 		//VAL: è l'errore sistematico c [relativo]				APP: -----
-result[3] = sqrt((N[D_reg]/(ND_exp*ND_exp))+(stat*stat)); 	//VAL: è d, l'errore sull'errore syst c [relativo] 		APP: -----
+result[0] = ND_exp;										//ND expected											APP: ND expected
+result[1] = sqrt(statW);								//VALIDATION PHASE: èstat err on ND_exp [relative]		APP PHASE: stat err on ND [relative]
+result[2] = fabs(N[D_reg]-ND_exp)/ND_exp; 					//VALIDATION PHASE: syst error c (see Heinrich and Lyons)				APP: -----
+result[3] = sqrt((N[D_reg]/(ND_exp*ND_exp))+(stat*stat)); 	//VALIDATION PHASE: stat error on c [relative] 		APP: -----
 
 delete bin_A; delete bin_B; delete bin_C; delete bin_D;
 return result;
