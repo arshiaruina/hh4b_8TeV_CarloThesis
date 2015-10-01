@@ -2,13 +2,13 @@ This repository collects all the source code written for my master thesis entitl
 
 Each folder contains the code for a single task, in order:
 
-1_ events selection
-2_ variables ranking
-3_ TMVA deployment 
-4_ figure of merit calculation
-5_ ABCD counting experiment
-6_ shape fit
-7_ combine datacards and commands
+1. events selection \\
+2. variables ranking
+3. TMVA deployment 
+4. figure of merit calculation
+5. ABCD counting experiment
+6. shape fit
+7. combine datacards and commands
 
 a Mathematica notebook containing the 8 TeV pp->hh cross section parametrization as a function of the anomalous couplings is included.
 
