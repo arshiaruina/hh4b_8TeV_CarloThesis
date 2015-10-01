@@ -2,7 +2,7 @@ This repository collects all the source code written for my master thesis entitl
 
 Each folder contains the code for a single task, in order:
 
-1. events selection \\
+1. events selection
 2. variables ranking
 3. TMVA deployment 
 4. figure of merit calculation
@@ -66,7 +66,7 @@ a Mathematica notebook containing the 8 TeV pp->hh cross section parametrization
 
 histo_to_Combine.cpp
 * description: conversion of the 2D histograms into 1D ones with no empty bins, creation of the +1sigma and -1sigma uncertainty shapes.
-* input: "scatters.root"
+* input: "scatters.root".
 * output: "toCombine.root"
 ---------------------------------------------------------
 7) COMBINE
