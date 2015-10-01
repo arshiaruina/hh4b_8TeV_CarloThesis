@@ -68,6 +68,7 @@ histo_to_Combine.cpp
 * description: conversion of the 2D histograms into 1D ones with no empty bins, creation of the +1sigma and -1sigma uncertainty shapes.
 * input: "scatters.root".
 * output: "toCombine.root"
+
 ---------------------------------------------------------
 7) COMBINE
 ---------------------------------------------------------
