@@ -1,0 +1,26 @@
+# Simple counting experiment, with one signal and a few background processes
+# Simplified version of the 35/pb H->WW analysis for mH = 160 GeV
+imax 1  number of channels
+jmax 1  number of backgrounds
+kmax 6  number of nuisance parameters (sources of systematical uncertainties)
+------------
+# we have just one channel, in which we observe 0 events
+bin 1
+observation 1711
+------------
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+bin              1     1
+process         ggHH   qcd
+process          0     1
+rate            1.11316   1928.61
+------------
+lumi    lnN    1.026    1.026    lumi affects both signal and gg->HH
+xs_ggH  lnN    1.11    -         gg->4b cross section unc
+btag    lnN    1.127    -        btag
+bdt_cut lnN    1.10     -
+trigger lnN    1.10     -
+qcd     lnN	 -	1.064     background events relative error uncertainty)
+

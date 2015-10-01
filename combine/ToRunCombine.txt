@@ -1,0 +1,10 @@
+--ABCD 
+combine -M Asymptotic ABCDdatacard.txt -m 125 --rMax=200
+
+--SHAPE FIT
+
+-Best fit
+combine -M MaxLikelihoodFit FITdatacard.txt --robustFit=1 -m 125 --plots —saveShape —rMax=200
+
+-Limit 
+combine -M Asymptotic FITdatacard.txt -m 125 --rMax=200

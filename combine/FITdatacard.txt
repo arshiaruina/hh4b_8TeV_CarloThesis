@@ -1,0 +1,21 @@
+max     1               number of categories
+jmax    1               number of samples -1
+kmax    *               nuisances par
+-----------------------------------------------------
+shapes * * toCombine.root	$PROCESS $PROCESS_$SYSTEMATIC
+-----------------------------------------------------
+bin             hh4b
+observation     4.5092e+04
+-----------------------------------------------------
+bin             hh4b            hh4b
+process         0               1
+process         sig1D           bkg1D
+rate            2.465883         4.5092e+04
+-----------------------------------------------------
+lumi    lnN     1.026           1.026
+xsBr    lnN     1.11            -
+btag    lnN     1.127           -        btag only on MC
+norm4b  lnN     -               1.50     4-btag norm error
+syst    shape   -               1        2-3 bin-by-bin difference
+trigger lnN     1.10            -
+
